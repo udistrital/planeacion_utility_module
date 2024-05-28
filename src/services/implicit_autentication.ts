@@ -14,9 +14,18 @@ export class ImplicitAutenticationService {
   private menuSubject = new BehaviorSubject({});
   public menu$ = this.menuSubject.asObservable();
 
+  private logoutSubject = new BehaviorSubject("");
+  public logout$ = this.logoutSubject.asObservable();
+
   constructor() {
     const user = localStorage.getItem("user")!;
     this.userSubject.next(JSON.parse(atob(user)));
+  }
+
+  public getPayload(): any {
+    const idToken = window.localStorage.getItem("id_token")?.split(".");
+    const payload = idToken != undefined ? JSON.parse(atob(idToken[1])) : null;
+    return payload;
   }
 
   public getRoles() {
