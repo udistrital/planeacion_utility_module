@@ -46,6 +46,7 @@
     "@types/jest": "^27.0.1",
     "@types/systemjs": "^6.1.1",
     "@types/webpack-env": "^1.16.2",
+    "axios": "^1.7.2",
     "crypto-js": "^4.2.0",
     "rxjs": "^7.8.1",
     "single-spa": "^5.9.3"
