@@ -34,7 +34,6 @@ export class RequestManager {
     */
 
     get(path, endpoint) {
-        console.log(path, endpoint);
         return this.header$.pipe(
             mergeMap(header => {
                 return from(axios.get<any>(`${path}${endpoint}`, header)).pipe(
