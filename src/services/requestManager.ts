@@ -1,15 +1,8 @@
 import { BehaviorSubject, catchError, from, map, mergeMap, of} from "rxjs";
 import axios, { AxiosResponse } from "axios";
 
-interface Header {
-    headers: {
-        Accept: string;
-        Authorization: string;
-    };
-}
-
 export class RequestManager {
-    private headerSubject = new BehaviorSubject<Header | {}>({});
+    private headerSubject = new BehaviorSubject({});
     public header$ = this.headerSubject.asObservable();
 
     constructor() {
@@ -20,12 +13,12 @@ export class RequestManager {
         const access_token = localStorage.getItem('access_token');
 
         if (access_token) {
-            const headers = {
-                Accept: 'application/json',
-                Authorization: `Bearer ${access_token}`
-            };
-    
-            this.headerSubject.next({ headers });
+          this.headerSubject.next({
+            headers: {
+              'Accept': 'application/json',
+              'Authorization': `Bearer ${access_token}`
+            }
+          })
         }
     }
 
@@ -41,7 +34,7 @@ export class RequestManager {
     get(path, endpoint) {
         return this.header$.pipe(
             mergeMap(header => {
-                return from(axios.get<any>(`${path}${endpoint}`, { headers: header.headers })).pipe(
+                return from(axios.get<any>(`${path}${endpoint}`, header)).pipe(
                     map((response: AxiosResponse<any>) => {
                         return response.data
                     }),
