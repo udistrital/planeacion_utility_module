@@ -1,8 +1,15 @@
 import { BehaviorSubject, catchError, from, map, mergeMap, of} from "rxjs";
 import axios, { AxiosResponse } from "axios";
 
+interface Header {
+    headers: {
+        Accept: string;
+        Authorization: string;
+    };
+}
+
 export class RequestManager {
-    private headerSubject = new BehaviorSubject({});
+    private headerSubject = new BehaviorSubject<Header | {}>({});
     public header$ = this.headerSubject.asObservable();
 
     constructor() {
