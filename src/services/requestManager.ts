@@ -4,7 +4,6 @@ import axios, { AxiosResponse } from "axios";
 export class RequestManager {
     private headerSubject = new BehaviorSubject({});
     public header$ = this.headerSubject.asObservable();
-    private header = new Headers();
 
     constructor() {
         this.updateHeaderToken();
@@ -14,13 +13,12 @@ export class RequestManager {
         const access_token = localStorage.getItem('access_token');
 
         if (access_token) {
-            this.header.append('Accept', 'application/json');
-            this.header.append('Authorization', `Bearer ${access_token}`);
-
-            this.headerSubject.next({
-                headers: this.header
-            })
-            
+          this.headerSubject.next({
+            headers: {
+              'Accept': 'application/json',
+              'Authorization': `Bearer ${access_token}`
+            }
+          })
         }
     }
 
