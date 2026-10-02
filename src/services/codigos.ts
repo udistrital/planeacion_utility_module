@@ -8,6 +8,11 @@ export class CodigosService {
   } = {
       PARAMETROS_SERVICE: {
         tipo_parametro: { PC: '' },
+        parametro: { 
+          'RPA-A-SP': '', 
+          'RPA-R-SP': '',
+          'RPA-F-SP': '', 
+        },
       },
       PLANES_CRUD: {
         'estado-plan': {
@@ -36,6 +41,11 @@ export class CodigosService {
         },
         'tipo-seguimiento': { F_SP: '', S_SP: '', SI_SP: '', FI_SP: '' },
       },
+      DOCUMENTO_SERVICE: {
+        'tipo_documento': {
+          DSPA: '',
+        }
+      }
     };
 
   private request = new RequestManager();
@@ -49,7 +59,7 @@ export class CodigosService {
  */
   public async getId(ruta: string, endpoint: string, abreviacion: string) {
     if (this.consultasCodigos[ruta][endpoint][abreviacion] === '') {
-      await new Promise((resolve, reject) => {
+      await new Promise((resolve) => {
         if (ruta == 'PLANES_CRUD') {
           this.request.get(environment.PLANES_CRUD, `${endpoint}?query=codigo_abreviacion:${abreviacion},activo:true`).subscribe({
             next: (data: DataRequest) => {
@@ -64,6 +74,14 @@ export class CodigosService {
             next: (data: DataRequest) => {
               if (data.Data[0]) {
                 resolve(data.Data[0].Id.toString());
+              }
+            },
+          });
+        } else if (ruta == 'DOCUMENTO_SERVICE') {
+          this.request.get(environment.DOCUMENTO_SERVICE, `${endpoint}?query=CodigoAbreviacion:${abreviacion},Activo:true`).subscribe({
+            next: (data: any[]) => {
+              if (data[0]) {
+                resolve(data[0].Id.toString());
               }
             },
           });
